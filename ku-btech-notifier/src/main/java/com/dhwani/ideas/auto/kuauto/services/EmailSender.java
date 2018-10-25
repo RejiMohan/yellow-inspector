@@ -77,6 +77,12 @@ public class EmailSender {
   }
 
 
+  /**
+   * Builds the HTML Message body from the update list.
+   *
+   * @param kuUpdatesList the ku updates list
+   * @return the message body in HTML format
+   */
   private static Object getMessage(List<KUUpdate> kuUpdatesList) {
 
 		messageBodyBuilder.append(

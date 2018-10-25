@@ -53,6 +53,38 @@ public class PageParserService {
     }
   }
 
+  private void parseTimeTablesPage(AppConfigDatum appCfg) {
+    try {
+      Document doc = Jsoup.connect(appCfg.getKuExamsTimeTablepage()).get();
+      Elements tableRowElements = doc.select(Constants.TABLE_ROW_SELECTOR);
+      processRowsInSelectedTable(tableRowElements, Category.TIMETABS);
+
+      log.info("Updates count after time tables page : {}", kuUpdatesList.size());
+
+    } catch (SelectorParseException | IOException ex) {
+      log.error("Failed to parse TIMETABLES Page.", ex);
+    }
+  }
+
+  private void parseResultsPage(AppConfigDatum appCfg) {
+    try {
+      Document doc = Jsoup.connect(appCfg.getKuExamsResultsPage()).get();
+      Elements tableRowElements = doc.select(Constants.TABLE_ROW_SELECTOR);
+      processRowsInSelectedTable(tableRowElements, Category.RESULTS);
+
+      log.info("Updates count after results page : {}", kuUpdatesList.size());
+
+    } catch (SelectorParseException | IOException ex) {
+      log.error("Failed to parse RESULTS Page.", ex);
+    }
+  }
+  
+  /**
+   * Process rows in selected HTML table.
+   *
+   * @param tableRowElements the table row elements
+   * @param category the category
+   */
   private void processRowsInSelectedTable(Elements tableRowElements, Category category) {
     if (CollectionUtils.isNotEmpty(tableRowElements)) {
       this.currentTableTitle = "";
@@ -91,31 +123,6 @@ public class PageParserService {
     return Optional.empty();
   }
 
-  private void parseTimeTablesPage(AppConfigDatum appCfg) {
-    try {
-      Document doc = Jsoup.connect(appCfg.getKuExamsTimeTablepage()).get();
-      Elements tableRowElements = doc.select(Constants.TABLE_ROW_SELECTOR);
-      processRowsInSelectedTable(tableRowElements, Category.TIMETABS);
-
-      log.info("Updates count after time tables page : {}", kuUpdatesList.size());
-
-    } catch (SelectorParseException | IOException ex) {
-      log.error("Failed to parse TIMETABLES Page.", ex);
-    }
-  }
-
-  private void parseResultsPage(AppConfigDatum appCfg) {
-    try {
-      Document doc = Jsoup.connect(appCfg.getKuExamsResultsPage()).get();
-      Elements tableRowElements = doc.select(Constants.TABLE_ROW_SELECTOR);
-      processRowsInSelectedTable(tableRowElements, Category.RESULTS);
-
-      log.info("Updates count after results page : {}", kuUpdatesList.size());
-
-    } catch (SelectorParseException | IOException ex) {
-      log.error("Failed to parse RESULTS Page.", ex);
-    }
-  }
 
   private void parseLatestUpdates(AppConfigDatum appCfg) {
     try {
